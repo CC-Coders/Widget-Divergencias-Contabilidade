@@ -48,7 +48,7 @@
                         <option value="Chamados por Solução">Chamados por Solução</option>
                         <option value="Chamados por Solicitante">Chamados por Solicitante</option>
                         <option value="Divergências Lançadas por Usuário">Divergências Lançadas por Usuário</option>
-                        <option value="Fundo Fixo Aprovado Por Usuário">Fundo Fixo Aprovado Por Usuário</option>
+                        <!-- <option value="Fundo Fixo Aprovado Por Usuário">Fundo Fixo Aprovado Por Usuário</option> -->
 
                     </select>
                 </div>

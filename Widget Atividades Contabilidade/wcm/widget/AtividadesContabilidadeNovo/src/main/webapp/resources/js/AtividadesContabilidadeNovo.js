@@ -134,7 +134,7 @@ async function CriaListaAtividadeContab() {
         stringHTML+="<tr>";
 
         stringHTML+="<td>";
-        stringHTML+="Fundo Fixo Aprovado";
+        stringHTML+="Fundo Fixo/RDO Aprovado";
         stringHTML+="</td>";
 
         stringHTML+="<td>";
