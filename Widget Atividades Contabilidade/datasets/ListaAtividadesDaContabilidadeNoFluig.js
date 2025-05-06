@@ -302,12 +302,13 @@ function MontaQueryFundoFixoAprovado(Ano, Mes, Dia){
         COUNT(PROCES_WORKFLOW.NUM_PROCES) as QNTD,\
         COUNT(CASE WHEN PROCES_WORKFLOW.END_DATE like '" + DataInicio + "-" + Dia + "%' THEN 1 END) as 'QNTDHOJE'\
     FROM PROCES_WORKFLOW\
-        INNER JOIN  ML00139928 ON  ML00139928.numProces = PROCES_WORKFLOW.NUM_PROCES\
+        INNER JOIN  ML00156422 ON  ML00156422.documentId = PROCES_WORKFLOW.NR_DOCUMENTO_CARD\
     WHERE\
         PROCES_WORKFLOW.END_DATE >= '" + DataInicio + "-01'\
         AND PROCES_WORKFLOW.END_DATE < '" + DataFim + "-01'\
-        AND ML00139928.atividade = 5\
-        AND ML00139928.aprov = 'sim'";
+        AND ML00156422.atividade = '6'\
+        AND ML00156422.modalidade = 'Recebimento'\
+        AND ML00156422.aprovacao = 'sim'";
 
 
     return myQuery;
@@ -338,14 +339,14 @@ function MontaQueryFundoFixoAprovadoPorUsuario(Ano, Mes, Dia){
     "SELECT\
         COUNT(PROCES_WORKFLOW.NUM_PROCES) as QNTD,\
         COUNT(CASE WHEN PROCES_WORKFLOW.END_DATE like '" + DataInicio + "-" + Dia + "%' THEN 1 END) as 'QNTDHOJE',\
-        ML00139928.usuario as USUARIO\
+        ML00156422.usuario as USUARIO\
     FROM PROCES_WORKFLOW\
-        INNER JOIN  ML00139928 ON  ML00139928.numProces = PROCES_WORKFLOW.NUM_PROCES\
+        INNER JOIN  ML00156422 ON  ML00156422.numProces = PROCES_WORKFLOW.NUM_PROCES\
     WHERE\
         PROCES_WORKFLOW.END_DATE >= '" + DataInicio + "-01'\
         AND PROCES_WORKFLOW.END_DATE < '" + DataFim + "-01'\
-        AND ML00139928.atividade = 5\
-        AND ML00139928.aprov = 'sim'\
+        AND ML00156422.atividade = 9\
+        AND ML00156422.aprovacao = 'sim'\
     GROUP BY USUARIO\
     ORDER BY USUARIO, QNTD DESC";
 
