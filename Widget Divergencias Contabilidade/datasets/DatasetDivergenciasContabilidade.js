@@ -20,7 +20,7 @@ function createDataset(fields, constraints, sortFields) {
         myQuery = MontaQueryBuscaCategoriaDivergencia();
     }
     else if (Operacao == "BuscaDivergencias") {
-        myQuery = MontaQueryBuscaDivergencias();
+        myQuery = MontaQueryBuscaDivergencias(constraints);
     }
     else if (Operacao == "BuscaMovimentos") {
         myQuery = MontaQueryBuscaMovimentos(Movimentos);
@@ -106,8 +106,10 @@ function MontaQueryBuscaCategoriaDivergencia(){
     return myQuery;
 }
 
-function MontaQueryBuscaDivergencias(){
-    return "SELECT \
+function MontaQueryBuscaDivergencias(constraints){
+    var constraints = getConstraints(constraints);
+
+    var query = "SELECT \
         DIVERGENCIASCONTABILIDADE.ID, \
         DIVERGENCIASCONTABILIDADE.CODCOLIGADA, \
         DIVERGENCIASCONTABILIDADE.IDMOV, \
@@ -123,7 +125,14 @@ function MontaQueryBuscaDivergencias(){
         DIVERGENCIASCONTABILIDADE.CREATEDBY,\
         DIVERGENCIASCONTABILIDADE.MODIFIEDBY\
     FROM DIVERGENCIASCONTABILIDADE\
-        INNER JOIN CATEGORIASDIVERGENCIASCONTABILIDADE ON CATEGORIASDIVERGENCIASCONTABILIDADE.ID = DIVERGENCIASCONTABILIDADE.CATEGORIA";
+        INNER JOIN CATEGORIASDIVERGENCIASCONTABILIDADE ON CATEGORIASDIVERGENCIASCONTABILIDADE.ID = DIVERGENCIASCONTABILIDADE.CATEGORIA\
+    WHERE 1 = 1 ";
+
+    if (constraints.FILTRODATAINICIO && constraints.FILTRODATAFIM) {
+        query += " AND CREATEDON BETWEEN '" + constraints.FILTRODATAINICIO + "' AND '"+constraints.FILTRODATAFIM+"'";
+    }
+
+    return query;
 }
 
 function MontaQueryBuscaMovimentos(Movimentos){
@@ -157,7 +166,7 @@ function MontaQueryBuscaMovimentos(Movimentos){
     FROM TMOV\
         INNER JOIN GCOLIGADA ON TMOV.CODCOLIGADA = GCOLIGADA.CODCOLIGADA\
         INNER JOIN GFILIAL ON TMOV.CODCOLIGADA = GFILIAL.CODCOLIGADA AND TMOV.CODFILIAL = GFILIAL.CODFILIAL\
-        INNER JOIN FCFO ON (TMOV.CODCOLIGADA = FCFO.CODCOLIGADA OR FCFO.CODCOLIGADA = 0) AND TMOV.CODCFO = FCFO.CODCFO\
+        LEFT JOIN FCFO ON (FCFO.CODCOLIGADA = 0) AND TMOV.CODCFO = FCFO.CODCFO\
         INNER JOIN TLOC ON TMOV.CODLOC = TLOC.CODLOC AND TMOV.CODCOLIGADA = TLOC.CODCOLIGADA  AND TMOV.CODFILIAL = TLOC.CODFILIAL\
     WHERE (" + WhereCODCOLIGADAAndIDMOV + ") "; 
 
@@ -281,4 +290,16 @@ function executaQueryNaCastilhoCustom(query) {
         }
     }
     return newDataset;
+}
+
+
+function getConstraints(constraints) {
+    var retorno = {};
+    if (constraints != null) {
+        for (var i = 0; i < constraints.length; i++) {
+            var constraint = constraints[i];
+            retorno[constraint.fieldName] = constraint.initialValue;
+        }
+    }
+    return retorno;
 }

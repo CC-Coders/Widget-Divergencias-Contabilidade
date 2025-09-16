@@ -173,7 +173,7 @@ function BuscaItensMovimentoRM(CODCOLIGADA, IDMOV) {
 function BuscaDivergencias(Filtros, Permissao) {
 	return new Promise(async (resolve, reject) => {
 		try {
-			var Divergencias = await BuscaListaDeDivergencias();
+			var Divergencias = await BuscaListaDeDivergencias(Filtros);
 			var Movimentos = await BuscaMovimentosDasDivergencias(Divergencias);
 			Divergencias = InsereNasDivergenciasAsInformacoesDoMovimento(Divergencias, Movimentos);
 			Divergencias = AplicaFiltroNasDivergencias(Divergencias, Filtros);
@@ -185,9 +185,11 @@ function BuscaDivergencias(Filtros, Permissao) {
 		}
 	});
 
-	async function BuscaListaDeDivergencias() {
+	async function BuscaListaDeDivergencias(Filtros) {
 		return await ExecutaDataset("DatasetDivergenciasContabilidade", null, [
-			DatasetFactory.createConstraint("Operacao", "BuscaDivergencias", "BuscaDivergencias", ConstraintType.MUST)
+			DatasetFactory.createConstraint("Operacao", "BuscaDivergencias", "BuscaDivergencias", ConstraintType.MUST),
+			DatasetFactory.createConstraint("FILTRODATAINICIO", Filtros.PeriodoInicio, Filtros.PeriodoInicio, ConstraintType.MUST),
+			DatasetFactory.createConstraint("FILTRODATAFIM", Filtros.PeriodoFim, Filtros.PeriodoFim, ConstraintType.MUST),
 		], null);
 	}
 

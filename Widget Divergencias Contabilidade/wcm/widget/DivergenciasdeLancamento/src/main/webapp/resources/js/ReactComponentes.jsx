@@ -143,7 +143,7 @@ function FiltroListaDivergencias({ onBuscaDivergencias, Permissao, OverloadFiltr
         FiltroUsuario: "Todos",
         FiltroTipoDeMovimento: "Todos",
         FiltroPeriodo: "Lancamento",
-        FiltroPeriodoInicio: moment().subtract(1, "year"),
+        FiltroPeriodoInicio: moment().subtract(6, "month"),
         FiltroPeriodoFim: moment(),
         FiltroStatus: "Ativo",
         FiltroEMAIL_PEND: OverloadFiltros.EMAIL_PEND ? OverloadFiltros.EMAIL_PEND : false
@@ -1244,8 +1244,10 @@ class ModalDetalhes extends React.Component {
                 <Panel Title="Divergência">
                     <div>
                         <h3>Divergência: {this.props.Divergencia.CATEGORIA}</h3>
-                        <b>Data da Divergência: </b> <span>{FormataDataParaDDMMYYYY(this.props.Divergencia.CREATEDON)}</span>
+                        <b>Data da Divergência: </b> <span>{FormataDataParaDDMMYYYY(this.props.Divergencia.CREATEDON)}</span><br/>
+                        <b>Lançado Por: </b> <span>{this.props.Divergencia.CREATEDBY}</span><br/>
                     </div>
+                    <br />
                     <div className="row">{this.renderOptFieldsCategoria()}</div>
                     <br />
                     {this.props.Divergencia.OBS_DIVERG.ObservacaoDivergencia != "" && (
